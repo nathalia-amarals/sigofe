@@ -22,10 +22,7 @@ export default {
   data () {
     return {
       form: {
-        id: '',
-        name: '',
-        obs: '',
-        normafile: ''
+        id: ''
       },
       show: true
     }
@@ -38,9 +35,9 @@ export default {
           'Authorization': 'Bearer ' + this.$root.$token
         }
 
-        this.$http.delete('http://localhost:3000/gestaonormas/norma/' + this.form.id, {headers})
+        this.$http.delete('http://localhost:3000/gestaonormas/planeja/' + this.form.id, {headers})
           .then(res => {
-            alert('Norma deletada com sucesso')
+            alert('Planejamento deletado com sucesso')
           })
           .catch(function () {
             this.$root.$isValidToken = false

@@ -3,31 +3,17 @@
     <h1> Cadastro de Normas </h1>
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
 
-      <b-form-group id="input-group-1" label="Nome:" label-for="input-1">
+      <b-form-group id="input-group-1" label="Id:" label-for="input-1">
         <b-form-input
           id="input-1"
-          v-model="form.name"
+          v-model="form.id"
           required
           placeholder="Insira nome"
         ></b-form-input>
+        <b-card class="mt-3" header="Form Data Result">
+        <pre class="m-0">{{ formRes }}</pre>
+        </b-card>
       </b-form-group>
-
-       <b-form-group id="input-group-2" label="Observação:" label-for="input-2">
-        <b-form-input
-          id="input-2"
-          v-model="form.obs"
-          required
-          placeholder="Insira observação"
-        ></b-form-input>
-      </b-form-group>
-
-      <b-form-file
-         v-model="form.file"
-        :state="Boolean(form.file)"
-        placeholder="Escolha um arquivo ou solte ele aqui..."
-        drop-placeholder="Solte o arquivo aqui..."
-      ></b-form-file>
-      <div class="mt-3">Arquivo selecionado: {{ form.file ? form.file.name : '' }}</div>
 
       <b-button type="submit" variant="primary">Salvar</b-button>
       <b-button type="reset" variant="danger">Limpar</b-button>
@@ -39,6 +25,7 @@
 export default {
   data () {
     return {
+      formRes: '',
       form: {
         id: '',
         name: '',
@@ -53,10 +40,9 @@ export default {
       evt.preventDefault()
 
       if (this.$root.$token !== '' && this.$root.$isValidToken) {
-        let formData = this.gatherFormData()
+        // let formData = this.gatherFormData()
 
         let headers = {
-          'Content-Type': 'multipart/form-data; boundary=' + formData._boundary,
           'Authorization': 'Bearer ' + this.$root.$token
         }
 
@@ -64,9 +50,10 @@ export default {
         // console.log(value)
         // }
 
-        this.$http.post('http://localhost:3000/gestaonormas/norma', formData, {headers})
+        this.$http.get('http://localhost:3000/gestaonormas/norma/' + this.form.id, {headers})
           .then(res => {
-            alert('Norma cadastrada com sucesso')
+            this.formRes = res.data
+            // alert('Norma cadastrada com sucesso')
           })
           .catch(function () {
             this.$root.$isValidToken = false
@@ -76,13 +63,13 @@ export default {
           })
       }
     },
-    gatherFormData () {
-      const data = new FormData()
-      data.append('file', this.form.file)
-      data.append('name', this.form.name)
-      data.append('obs', this.form.obs)
-      return data
-    },
+    // gatherFormData () {
+    //   const data = new FormData()
+    //   data.append('file', this.form.file)
+    //   data.append('name', this.form.name)
+    //   data.append('obs', this.form.obs)
+    //   return data
+    // },
     onReset (evt) {
       evt.preventDefault()
       // Reset our form values

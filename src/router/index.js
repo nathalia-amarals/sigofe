@@ -14,6 +14,11 @@ import CadastraProduto from '@/components/gesprocind/CadastraProduto'
 import AtualizaProduto from '@/components/gesprocind/AtualizaProduto'
 import DeletaProduto from '@/components/gesprocind/DeletaProduto'
 import LoginForm from '@/components/autenticacao/LoginForm'
+import CadastraPlanejamento from '@/components/genormas/CadastraPlanejamento'
+import AtualizaPlanejamento from '@/components/genormas/AtualizaPlanejamento'
+import DeletaPlanejamento from '@/components/genormas/DeletaPlanejamento'
+import CarregaPlanejamento from '@/components/genormas/CarregaPlanejamento'
+import CarregaNorma from '@/components/genormas/CarregaNorma'
 // import HelloWorld from '@/components/HelloWorld'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -48,6 +53,31 @@ export default new Router({
       path: '/sigo/deletanorma',
       name: 'Gestão de Normas - Deleta Norma',
       component: DeletaNorma
+    },
+    {
+      path: '/sigo/carreganorma',
+      name: 'Gestão de Normas - Carrega Norma',
+      component: CarregaNorma
+    },
+    {
+      path: '/sigo/cadastraplaneja',
+      name: 'Gestão de Normas - Cadastra Planejamento',
+      component: CadastraPlanejamento
+    },
+    {
+      path: '/sigo/atualizanorma',
+      name: 'Gestão de Normas - Atualiza Planejamento',
+      component: AtualizaPlanejamento
+    },
+    {
+      path: '/sigo/deletanorma',
+      name: 'Gestão de Normas - Deleta Planejamento',
+      component: DeletaPlanejamento
+    },
+    {
+      path: '/sigo/carregaplanejamento',
+      name: 'Gestão de Normas - Carrega Planejamento',
+      component: CarregaPlanejamento
     },
     {
       path: '/sigo/conasse/cadcontrato',

@@ -69,7 +69,7 @@ export default {
         // for (var value of formData.entries()) {
         // console.log(value)
         // }
-        this.$http.put('http://localhost:3000/gestaonormas/', formData, {headers})
+        this.$http.put('http://localhost:3000/gestaonormas/norma', formData, {headers})
           .then(res => {
             alert('Norma atualizada com sucesso')
           })
