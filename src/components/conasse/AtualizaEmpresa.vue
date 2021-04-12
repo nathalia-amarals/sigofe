@@ -8,7 +8,7 @@
           id="input-1"
           v-model="form.id"
           required
-          placeholder="Insira a razão social da empresa"
+          placeholder="Insira o identificador da Empresa"
         ></b-form-input>
       </b-form-group>
 
@@ -65,15 +65,19 @@ export default {
           'Authorization': 'Bearer ' + this.$root.$token
         }
 
-        this.$http.put('http://localhost:3000/consultassessor/empresa', JSON.stringify(this.form), {headers})
+        this.$http.put('http://sigoapp.southcentralus.azurecontainer.io:3000/sigo/consultassessor/empresa', JSON.stringify(this.form), {headers})
           .then(res => {
             alert('Empresa atualizada com sucesso')
           })
-          .catch(function () {
-            this.$root.$isValidToken = false
-            console.log('token invalidado')
-            alert('Sessão expirada, favor refazer o login')
-            this.$router.push('/autenticacao')
+          .catch(res => {
+            if (res.status === 404 || res.status === 401) {
+              this.$root.$isValidToken = false
+              console.log('token invalidado')
+              alert('Sessão expirada, favor refazer o login')
+              this.$router.push('/sigo/autenticacao')
+            } else {
+              alert('Empresa não atualizada, cheque os dados')
+            }
           })
       }
     },

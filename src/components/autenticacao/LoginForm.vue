@@ -43,9 +43,10 @@ export default {
     onSubmit (evt) {
       evt.preventDefault()
       // alert(JSON.stringify(this.form))
-      this.$http.post('http://localhost:3000/autenticacao/autenticar', JSON.stringify(this.form))
+      this.$http.post('http://sigoapp.southcentralus.azurecontainer.io:3000/sigo/autenticacao/autenticar', JSON.stringify(this.form))
         .then(res => {
           this.$root.$token = res.body.token
+          // console.log('token ' + this.$root.$token)
           alert('Login realizado com sucesso')
           this.$root.$isValidToken = true
           console.log(this.$root.$isValidToken)

@@ -6,6 +6,7 @@ import AtualizaNorma from '@/components/genormas/AtualizaNorma'
 import DeletaNorma from '@/components/genormas/DeletaNorma'
 import CadastraEmpresa from '@/components/conasse/CadastraEmpresa'
 import CadastraContrato from '@/components/conasse/CadastraContrato'
+import CarregaContrato from '@/components/conasse/CarregaContrato'
 import AtualizaEmpresa from '@/components/conasse/AtualizaEmpresa'
 import AtualizaContrato from '@/components/conasse/AtualizaContrato'
 import DeletaEmpresa from '@/components/conasse/DeletaEmpresa'
@@ -35,7 +36,7 @@ Vue.use(IconsPlugin)
 export default new Router({
   routes: [
     {
-      path: '/sigo',
+      path: '/',
       name: 'Sistema de Integração de Gestão Industrial',
       component: Home
     },
@@ -65,12 +66,12 @@ export default new Router({
       component: CadastraPlanejamento
     },
     {
-      path: '/sigo/atualizanorma',
+      path: '/sigo/atualizaplaneja',
       name: 'Gestão de Normas - Atualiza Planejamento',
       component: AtualizaPlanejamento
     },
     {
-      path: '/sigo/deletanorma',
+      path: '/sigo/deletaplaneja',
       name: 'Gestão de Normas - Deleta Planejamento',
       component: DeletaPlanejamento
     },
@@ -83,6 +84,11 @@ export default new Router({
       path: '/sigo/conasse/cadcontrato',
       name: 'Consultorias e Assessorias - Cadastra Contrato',
       component: CadastraContrato
+    },
+    {
+      path: '/sigo/conasse/carregacontrato',
+      name: 'Consultorias e Assessorias - Carrega Contrato',
+      component: CarregaContrato
     },
     {
       path: '/sigo/conasse/cadempresa',
@@ -131,7 +137,7 @@ export default new Router({
       component: DeletaProduto
     },
     {
-      path: '/autenticacao',
+      path: '/sigo/autenticacao',
       name: 'Login',
       component: LoginForm
     }

@@ -1,17 +1,7 @@
 <template>
     <div class='formgn'>
-    <h1> Cadastro de Normas </h1>
+    <h1> Cadastro de Planejamento </h1>
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-
-      <b-form-group id="input-group-1" label="Id:" label-for="input-1">
-        <b-form-input
-          id="input-1"
-          v-model="form.id"
-          required
-          placeholder="Insira id"
-        ></b-form-input>
-      </b-form-group>
-
       <b-form-group id="input-group-2" label="Nome do Planejamento:" label-for="input-2">
         <b-form-input
           id="input-2"
@@ -75,7 +65,6 @@ export default {
   data () {
     return {
       form: {
-        id: '',
         nomeDoPlan: '',
         planoDeAcao: '',
         acao1: '',
@@ -91,9 +80,10 @@ export default {
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
-
+      console.log('OnSubmit')
+      console.log('token' + this.$root.$token)
       if (this.$root.$token !== '' && this.$root.$isValidToken) {
-        let formData = this.gatherFormData()
+        // let formData = this.gatherFormData()
 
         let headers = {
           'Content-Type': 'application/json',
@@ -101,37 +91,63 @@ export default {
         }
 
         // for (var value of formData.entries()) {
-        // console.log(value)
+        //   console.log(value)
         // }
 
-        this.$http.post('http://localhost:3000/gestaonormas/planeja', formData, {headers})
+        // var object = {}
+        // for (var pair of formData.entries()) {
+        //   object[pair[0]] = pair[1]
+        // }
+        // formData.forEach((value, key) => object[key] = value)
+        // var json = JSON.stringify(object)
+        let object = this.gatherFormData()
+        let json = JSON.stringify(object)
+        console.log(json)
+
+        this.$http.post('http://sigoapp.southcentralus.azurecontainer.io:3000/sigo/gestaonormas/planeja', json, {headers})
           .then(res => {
-            alert('Norma cadastrada com sucesso')
+            alert('Planejamento cadastrado com sucesso')
           })
-          .catch(function () {
-            this.$root.$isValidToken = false
-            console.log('token invalidado')
-            alert('Sessão expirada, favor refazer o login')
-            this.$router.push('/autenticacao')
+          .catch(res => {
+            if (res.status === 404 || res.status === 401) {
+              this.$root.$isValidToken = false
+              console.log('token invalidado')
+              alert('Sessão expirada, favor refazer o login')
+              this.$router.push('/sigo/autenticacao')
+            } else {
+              alert('Planejamento não cadastrado, verifique os dados')
+            }
           })
       }
     },
     gatherFormData () {
-      const data = new FormData()
-      data.append('id', this.form.id)
-      data.append('nomeDoPlan', this.form.nomeDoPlan)
-      data.append('planoDeAcao', this.form.planoDeAcao)
-      const etapa = new FormData()
-      etapa.append(this.form.acao1, this.form.data1)
-      etapa.append(this.form.acao2, this.form.data2)
-      etapa.append(this.form.acao3, this.form.data3)
-      data.append('etapaData', etapa)
+      // const data = new FormData()
+      // data.append('nomeDoPlan', this.form.nomeDoPlan)
+      // data.append('planoDeAcao', this.form.planoDeAcao)
+      // const etapa = new FormData()
+      // etapa.append(this.form.acao1, this.form.data1)
+      // etapa.append(this.form.acao2, this.form.data2)
+      // etapa.append(this.form.acao3, this.form.data3)
+      // var object = {}
+      // for (var pair of etapa.entries()) {
+      //   object[pair[0]] = pair[1]
+      // }
+      // etapa.forEach((value, key) => object[key] = value)
+      // var json = JSON.stringify(object)
+      // data.append('etapaData', object)
+      const data = {}
+      data['nomeDoPlan'] = this.form.nomeDoPlan
+      data['planoDeAcao'] = this.form.planoDeAcao
+      let etapaData = {}
+      etapaData[this.form.acao1] = this.form.data1
+      etapaData[this.form.acao2] = this.form.data2
+      etapaData[this.form.acao3] = this.form.data3
+      data['etapaData'] = etapaData
       return data
     },
     onReset (evt) {
       evt.preventDefault()
       // Reset our form values
-      this.form.id = ''
       this.form.name = ''
       this.form.obs = ''
       this.form.normafile = ''

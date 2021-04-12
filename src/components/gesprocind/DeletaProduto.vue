@@ -37,15 +37,19 @@ export default {
           'Authorization': 'Bearer ' + this.$root.$token
         }
 
-        this.$http.delete('http://localhost:3000/gestaoprocind/' + this.form.id, {headers})
+        this.$http.delete('http://sigoapp.southcentralus.azurecontainer.io:3000/sigo/gestaoprocind/' + this.form.id, {headers})
           .then(res => {
             alert('Produto deletado com sucesso')
           })
-          .catch(function () {
-            this.$root.$isValidToken = false
-            console.log('token invalidado')
-            alert('Sessão expirada, favor refazer o login')
-            this.$router.push('/autenticacao')
+          .catch(res => {
+            if (res.status === 404 || res.status === 401) {
+              this.$root.$isValidToken = false
+              console.log('token invalidado')
+              alert('Sessão expirada, favor refazer o login')
+              this.$router.push('/sigo/autenticacao')
+            } else {
+              alert('Produto não encontrado')
+            }
           })
       }
     },
@@ -53,13 +57,6 @@ export default {
       evt.preventDefault()
       // Reset our form values
       this.form.id = ''
-      this.form.nome = ''
-      this.form.referencia = ''
-      this.form.altura = ''
-      this.form.largura = ''
-      this.form.composicao = ''
-      this.form.cor = null
-      this.form.estado = ''
       // Trick to reset/clear native browser form validation state
       this.show = false
       this.$nextTick(() => {

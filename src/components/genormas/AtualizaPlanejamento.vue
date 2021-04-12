@@ -92,7 +92,7 @@ export default {
       evt.preventDefault()
 
       if (this.$root.$token !== '' && this.$root.$isValidToken) {
-        let formData = this.gatherFormData()
+        // let formData = this.gatherFormData()
 
         let headers = {
           'Content-Type': 'application/json',
@@ -100,30 +100,48 @@ export default {
         }
 
         // for (var value of formData.entries()) {
-        // console.log(value)
+        //   console.log(value)
         // }
-        this.$http.put('http://localhost:3000/gestaonormas/planeja', formData, {headers})
+
+        let object = this.gatherFormData()
+        let json = JSON.stringify(object)
+        console.log(json)
+
+        this.$http.put('http://sigoapp.southcentralus.azurecontainer.io:3000/sigo/gestaonormas/planeja', json, {headers})
           .then(res => {
             alert('Planejamento atualizado com sucesso')
           })
-          .catch(function () {
-            this.$root.$isValidToken = false
-            console.log('token invalidado')
-            alert('Sessão expirada, favor refazer o login')
-            this.$router.push('/autenticacao')
+          .catch(res => {
+            if (res.status === 404 || res.status === 401) {
+              this.$root.$isValidToken = false
+              console.log('token invalidado')
+              alert('Sessão expirada, favor refazer o login')
+              this.$router.push('/sigo/autenticacao')
+            } else {
+              alert('Planejamento não atualizado, verifique os dados')
+            }
           })
       }
     },
     gatherFormData () {
-      const data = new FormData()
-      data.append('id', this.form.id)
-      data.append('nomeDoPlan', this.form.nomeDoPlan)
-      data.append('planoDeAcao', this.form.planoDeAcao)
-      const etapa = new FormData()
-      etapa.append(this.form.acao1, this.form.data1)
-      etapa.append(this.form.acao2, this.form.data2)
-      etapa.append(this.form.acao3, this.form.data3)
-      data.append('etapaData', etapa)
+      // const data = new FormData()
+      // data.append('id', this.form.id)
+      // data.append('nomeDoPlan', this.form.nomeDoPlan)
+      // data.append('planoDeAcao', this.form.planoDeAcao)
+      // const etapa = new FormData()
+      // etapa.append(this.form.acao1, this.form.data1)
+      // etapa.append(this.form.acao2, this.form.data2)
+      // etapa.append(this.form.acao3, this.form.data3)
+      // data.append('etapaData', etapa)
+      const data = {}
+      data['id'] = this.form.id
+      data['nomeDoPlan'] = this.form.nomeDoPlan
+      data['planoDeAcao'] = this.form.planoDeAcao
+      let etapaData = {}
+      etapaData[this.form.acao1] = this.form.data1
+      etapaData[this.form.acao2] = this.form.data2
+      etapaData[this.form.acao3] = this.form.data3
+      data['etapaData'] = etapaData
       return data
     },
     onReset (evt) {

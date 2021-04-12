@@ -8,7 +8,7 @@
           id="input-8"
           v-model="form.id"
           required
-          placeholder="Insira o nome do produto"
+          placeholder="Insira o identificador do produto"
         ></b-form-input>
       </b-form-group>
 
@@ -108,15 +108,19 @@ export default {
           'Authorization': 'Bearer ' + this.$root.$token
         }
 
-        this.$http.post('http://localhost:3000/gestaoprocind', JSON.stringify(this.form), {headers})
+        this.$http.post('http://sigoapp.southcentralus.azurecontainer.io:3000/sigo/gestaoprocind', JSON.stringify(this.form), {headers})
           .then(res => {
             alert('Produto cadastrado com sucesso')
           })
-          .catch(function () {
-            this.$root.$isValidToken = false
-            console.log('token invalidado')
-            alert('Sessão expirada, favor refazer o login')
-            this.$router.push('/autenticacao')
+          .catch(res => {
+            if (res.status === 404 || res.status === 401) {
+              this.$root.$isValidToken = false
+              console.log('token invalidado')
+              alert('Sessão expirada, favor refazer o login')
+              this.$router.push('/sigo/autenticacao')
+            } else {
+              alert('Produto não cadastrado, verifique os dados')
+            }
           })
       }
     },

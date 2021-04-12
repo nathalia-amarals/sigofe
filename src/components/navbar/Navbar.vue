@@ -11,12 +11,12 @@
           <b-form-input size="sm" class="mr-sm-2" placeholder="Pesquisar"></b-form-input>
           <b-button size="sm" class="my-2 my-sm-0" type="submit">Pesquisar</b-button>
         </b-nav-form>
-
-        <router-link to="/autenticacao">
-            Login
-            </router-link>
-
       </b-navbar-nav>
+        <div>
+        <router-link to="/sigo/autenticacao">
+            Login
+        </router-link>
+        </div>
   </b-navbar>
 </div>
 </template>

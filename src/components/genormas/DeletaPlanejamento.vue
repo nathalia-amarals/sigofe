@@ -35,15 +35,19 @@ export default {
           'Authorization': 'Bearer ' + this.$root.$token
         }
 
-        this.$http.delete('http://localhost:3000/gestaonormas/planeja/' + this.form.id, {headers})
+        this.$http.delete('http://sigoapp.southcentralus.azurecontainer.io:3000/sigo/gestaonormas/planeja/' + this.form.id, {headers})
           .then(res => {
             alert('Planejamento deletado com sucesso')
           })
-          .catch(function () {
-            this.$root.$isValidToken = false
-            console.log('token invalidado')
-            alert('Sessão expirada, favor refazer o login')
-            this.$router.push('/autenticacao')
+          .catch(res => {
+            if (res.status === 404 || res.status === 401) {
+              this.$root.$isValidToken = false
+              console.log('token invalidado')
+              alert('Sessão expirada, favor refazer o login')
+              this.$router.push('/sigo/autenticacao')
+            } else {
+              alert('Planejamento não encontrado')
+            }
           })
       }
     },

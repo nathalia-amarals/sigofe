@@ -1,6 +1,6 @@
 <template>
     <div class='formgn'>
-    <h1> Cadastro de Normas </h1>
+    <h1> Carrega Planejamento </h1>
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
 
       <b-form-group id="input-group-1" label="Id:" label-for="input-1">
@@ -11,7 +11,7 @@
           placeholder="Insira id"
         ></b-form-input>
 
-        <b-card class="mt-3" header="Form Data Result">
+        <b-card class="mt-3" header="Planejamento">
         <pre class="m-0">{{ formRes }}</pre>
         </b-card>
 
@@ -50,16 +50,20 @@ export default {
         // console.log(value)
         // }
 
-        this.$http.get('http://localhost:3000/gestaonormas/planeja/' + this.form.id, {headers})
+        this.$http.get('http://sigoapp.southcentralus.azurecontainer.io:3000/sigo/gestaonormas/planeja/' + this.form.id, {headers})
           .then(res => {
             this.formRes = res.data
             alert('Planejamento cadastrado com sucesso')
           })
-          .catch(function () {
-            this.$root.$isValidToken = false
-            console.log('token invalidado')
-            alert('Sessão expirada, favor refazer o login')
-            this.$router.push('/autenticacao')
+          .catch(res => {
+            if (res.status === 404 || res.status === 401) {
+              this.$root.$isValidToken = false
+              console.log('token invalidado')
+              alert('Sessão expirada, favor refazer o login')
+              this.$router.push('/sigo/autenticacao')
+            } else {
+              alert('Planejamento não cadastrado, verifique as informações')
+            }
           })
       }
     },

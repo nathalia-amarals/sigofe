@@ -28,12 +28,12 @@
       </b-form-group>
 
       <b-form-file
-        v-model="file"
-        :state="Boolean(file)"
+        v-model="form.file"
+        :state="Boolean(form.file)"
         placeholder="Escolha um arquivo ou solte ele aqui..."
         drop-placeholder="Solte o arquivo aqui..."
       ></b-form-file>
-      <div class="mt-3">Arquivo selecionado: {{ file ? file.name : '' }}</div>
+      <div class="mt-3">Arquivo selecionado: {{ form.file ? form.file.name : '' }}</div>
 
       <b-button type="submit" variant="primary">Salvar</b-button>
       <b-button type="reset" variant="danger">Limpar</b-button>
@@ -69,15 +69,19 @@ export default {
         // for (var value of formData.entries()) {
         // console.log(value)
         // }
-        this.$http.put('http://localhost:3000/gestaonormas/norma', formData, {headers})
+        this.$http.put('http://sigoapp.southcentralus.azurecontainer.io:3000/sigo/gestaonormas/norma', formData, {headers})
           .then(res => {
             alert('Norma atualizada com sucesso')
           })
-          .catch(function () {
-            this.$root.$isValidToken = false
-            console.log('token invalidado')
-            alert('Sessão expirada, favor refazer o login')
-            this.$router.push('/autenticacao')
+          .catch(res => {
+            if (res.status === 404 || res.status === 401) {
+              this.$root.$isValidToken = false
+              console.log('token invalidado')
+              alert('Sessão expirada, favor refazer o login')
+              this.$router.push('/sigo/autenticacao')
+            } else {
+              alert('Norma não atualizada, verifique os dados')
+            }
           })
       }
     },

@@ -13,13 +13,16 @@ Vue.use(VueResource)
 let $isValidToken = false
 // export default $isValidToken
 /* eslint-disable no-new */
+let $token = 'teste'
 new Vue({
   el: '#app',
   router,
   // $isValidToken,
-  created: {
-    $isValidToken,
-    $token: ''
+  created () {
+    return {
+      $isValidToken,
+      $token
+    }
   },
   components: { App },
   template: '<App/>'

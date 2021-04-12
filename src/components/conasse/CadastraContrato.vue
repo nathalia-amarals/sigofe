@@ -68,21 +68,26 @@ export default {
           'Authorization': 'Bearer ' + this.$root.$token
         }
 
-        this.$http.post('http://localhost:3000/consultassessor/contrato', JSON.stringify(this.form), {headers})
+        this.$http.post('http://sigoapp.southcentralus.azurecontainer.io:3000/sigo/consultassessor/contrato', JSON.stringify(this.form), {headers})
           .then(res => {
             alert('Contrato cadastrado com sucesso')
           })
-          .catch(function () {
-            this.$root.$isValidToken = false
-            console.log('token invalidado')
-            alert('Sessão expirada, favor refazer o login')
-            this.$router.push('/autenticacao')
+          .catch(res => {
+            if (res.status === 404 || res.status === 401) {
+              this.$root.$isValidToken = false
+              console.log('token invalidado')
+              alert('Sessão expirada, favor refazer o login')
+              this.$router.push('/sigo/autenticacao')
+            } else {
+              alert('Contrato não cadastrado')
+            }
           })
       }
     },
     onReset (evt) {
       evt.preventDefault()
       // Reset our form values
+      this.form.id = ''
       this.form.idEmpresa = ''
       this.form.valor = ''
       this.form.descricao = ''
